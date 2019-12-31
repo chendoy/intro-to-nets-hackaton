@@ -1,4 +1,3 @@
-
 from socket import *
 
 DISCOVER = '1'
