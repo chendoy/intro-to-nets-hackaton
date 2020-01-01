@@ -1,4 +1,4 @@
-from socket import *
+import socket
 import message
 import ranger
 import encoder_decoder as encd
@@ -12,14 +12,15 @@ REQUEST = '3'
 ACK = '4'
 NEG_ACK = '5'
 encoder_decoder: encd.Encoder_decoder = encd.Encoder_decoder()
-server_port = 3117
+server_port = 3107
 
 
 class Server:
-    def _init_(self):
-        self.server_socket = socket(AF_INET, SOCK_DGRAM)
+    server_socket = None
+
+    def __init__(self):
+        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.server_socket.bind(("", server_port))
-        self.clients_list = []
 
     def search(self, start, end, hash_str):
         r: ranger.Ranger = ranger.Ranger(start, end)
@@ -45,9 +46,15 @@ class Server:
     def listen_clients(self):
         while True:
             msg, client = self.server_socket.recvfrom(server_port)
+            print(encoder_decoder.decode(msg).type)
             t = threading.Thread(target=self.talkToClient, args=(client, encoder_decoder.decode(msg)))
             t.start()
 
 
+def main():
+    server = Server()
+    server.listen_clients()
+
+
 if __name__ == "__main__":
-    Server()
+    main()

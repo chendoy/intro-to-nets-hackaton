@@ -29,3 +29,4 @@ class Tester(unittest.TestCase):
         res_message: msg.Message = self.encoder_decoder.decode(res)
         self.assertEqual(res_message.type, OFFER)
 
+
