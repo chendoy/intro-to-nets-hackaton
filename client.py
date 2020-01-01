@@ -93,7 +93,7 @@ def wait_for_ack(str_length):
             WORKERS.remove(server_address)
 
         if len(WORKERS) == 0:  # all servers returned NACK
-            return 'Not found!'
+            return 'not found!'
 
 
 if __name__ == "__main__":
