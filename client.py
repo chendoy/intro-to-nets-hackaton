@@ -1,4 +1,4 @@
-import socket, ranger, math, encoder_decoder, select
+import socket, ranger, math, encoder_decoder
 import itertools as it
 import message as message
 
@@ -17,10 +17,27 @@ def main():
     client_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     enc_dec = encoder_decoder.Encoder_decoder()
     hashed_string = input('Welcome to ' + TEAM_NAME + '.' + ' Please enter the hash:\n')
-    length = input('Please enter the input string length:\n')
+    str_length = input('Please enter the input string length:\n')
     send_discover(client_sock, enc_dec)
-    wait_for_offers(client_sock, enc_dec, OFFER_TIMEOUT)
-#    client_socket.sendto(hashed_string,(server_name,server_port))
+    workers = wait_for_offers(client_sock, enc_dec, OFFER_TIMEOUT)
+    jobs = create_jobs(str_length, len(workers))
+    send_requests(workers, jobs, enc_dec, client_sock, hashed_string)
+    ans = wait_for_ack()
+    print(ans)
+
+
+def send_requests(workers, jobs, enc_dec, client_sock, hashed_string):
+    i=0
+    for worker in workers:
+        send_request(worker, jobs[i], enc_dec, client_sock, hashed_string)
+        i = i + 1
+
+
+def send_request(worker, job, enc_dec, client_sock, hashed_string):
+    length = len(job[0])
+    req_msg = message.Message(TEAM_NAME, 3, hashed_string, length, job[0], job[1])
+    encoded_msg = enc_dec.encode(req_msg)
+    client_sock.sendto(encoded_msg, (worker, SERVER_PORT))
 
 
 def send_discover(client_socket: socket, enc_dec: encoder_decoder):
@@ -28,12 +45,15 @@ def send_discover(client_socket: socket, enc_dec: encoder_decoder):
     encoded = enc_dec.encode(discover_msg)
     client_socket.sendto(encoded, (SERVER_NAME, SERVER_PORT))
 
-def wait_for_offers(client_sock, enc_dec, timeout):
-    client_sock.setblocking(0)
+
+def wait_for_offers(client_sock, enc_dec):
     client_sock.settimeout(OFFER_TIMEOUT)
-    while(1):
-        (msg, server_address) = client_sock.recvfrom(2048)
+    try:
+        (message, server_address) = client_sock.recvfrom(2048)
         WORKERS.append(server_address)
+    except socket.timeout:
+        return WORKERS
+
 
 def split_to_chunks(lst, each):
     return list(it.zip_longest(*[iter(lst)] * each))
@@ -49,6 +69,17 @@ def divide(length,num_servers):
     chunks = split_to_chunks(strings,each)
     return chunks
 
+
+def create_jobs(length, num_servers):
+    jobs = []
+    chunks = divide(length, num_servers)
+    for chunk in chunks:
+        jobs.append((chunk[0], chunk[-1]))
+    return jobs
+
+
+def wait_for_ack():
+    return 'answer'
 
 if __name__ == "__main__":
     main()
