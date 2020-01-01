@@ -5,14 +5,14 @@ import encoder_decoder as encd
 import hashlib
 import threading
 
-TEAM_NAME = 'UDP MONSTERS'
+TEAM_NAME = 'UDP FTW'
 DISCOVER = '1'
 OFFER = '2'
 REQUEST = '3'
 ACK = '4'
 NEG_ACK = '5'
 encoder_decoder: encd.Encoder_decoder = encd.Encoder_decoder()
-server_port = 3101
+server_port = 3117
 
 
 class Server:

@@ -1,10 +1,16 @@
-import socket, ranger, math, encoder_decoder, message, itertools as it
+import socket
+import ranger
+import math
+import encoder_decoder
+import message
+import itertools as it
 
 # client configuration #
 
-SERVER_NAME = "127.0.0.1"
-SERVER_PORT = 3101
-TEAM_NAME = 'UDP MONSTERS'
+SERVER_IP = "127.0.0.1"
+BROADCAST = "255.255.255.255"
+SERVER_PORT = 3117
+TEAM_NAME = 'UDP FTW'
 OFFER_TIMEOUT = 1000  # milliseconds
 NUM_OF_LETTERS = 26
 WORKERS = []
@@ -21,7 +27,7 @@ def main():
     jobs = create_jobs(str_length, len(WORKERS))
     send_requests(WORKERS, jobs, hashed_string)
     ans = wait_for_ack(str_length)
-    print(ans)
+    print('The input string is ' + ans)
 
 
 def send_requests(workers, jobs, hashed_string):
@@ -41,7 +47,8 @@ def send_request(worker, job, hashed_string):
 def send_discover():
     discover_msg = message.Message(TEAM_NAME, message.DISCOVER, None, None, None, None)
     encoded = enc_dec.encode(discover_msg)
-    client_sock.sendto(encoded, (SERVER_NAME, SERVER_PORT))
+    client_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+    client_sock.sendto(encoded, (BROADCAST, SERVER_PORT))
 
 
 def wait_for_offers():
@@ -82,8 +89,11 @@ def wait_for_ack(str_length):
         decoded_msg = enc_dec.decode(msg)
         if decoded_msg.type == message.ACK:
             return decoded_msg.start[0:str_length]
+        elif decoded_msg.type == message.NACK:
+            WORKERS.remove(server_address)
 
-        #TODO: complete nack
+        if len(WORKERS) == 0:  # all servers returned NACK
+            return 'Not found!'
 
 
 if __name__ == "__main__":

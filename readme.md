@@ -1,7 +1,7 @@
 # TO DO
 
-- add timeout in client waiting for response frm the servers
-- handle nacks in client
-- handle invalid input
-- understand when threads are needed and where servers are needed
-- test with multiple computers
+- add timeout in client side (waiting for response)
+- add timeout in server side (processing is taking too long)
+- handle invalid inputs
+- understand when threads are needed and when servers are needed
+- test with multiple computers simultaneously
