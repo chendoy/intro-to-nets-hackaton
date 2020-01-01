@@ -5,7 +5,6 @@ import encoder_decoder as encd
 import hashlib
 import threading
 
-
 TEAM_NAME = 'NAME'
 DISCOVER = '1'
 OFFER = '2'
@@ -25,7 +24,8 @@ class Server:
     def search(self, start, end, hash_str):
         r: ranger.Ranger = ranger.Ranger(start, end)
         for word in r.generate_all_from_to_of_len():
-            if hashlib.sha1(word) == hash_str:
+            hash_fun_res = hashlib.sha1(word.encode('utf-8')).hexdigest()
+            if hash_fun_res == hash_str:
                 return word
         return None
 
