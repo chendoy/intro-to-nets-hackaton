@@ -3,7 +3,7 @@ import socket, ranger, math, encoder_decoder, message, itertools as it
 # client configuration #
 
 SERVER_NAME = "127.0.0.1"
-SERVER_PORT = 3200
+SERVER_PORT = 3101
 TEAM_NAME = 'UDP MONSTERS'
 OFFER_TIMEOUT = 1000  # milliseconds
 NUM_OF_LETTERS = 26
@@ -20,7 +20,7 @@ def main():
     wait_for_offers()
     jobs = create_jobs(str_length, len(WORKERS))
     send_requests(WORKERS, jobs, hashed_string)
-    ans = wait_for_ack()
+    ans = wait_for_ack(str_length)
     print(ans)
 
 
@@ -76,12 +76,14 @@ def create_jobs(length, num_servers):
     return jobs
 
 
-def wait_for_ack():
+def wait_for_ack(str_length):
     while 1:
         (msg, server_address) = client_sock.recvfrom(2048)
         decoded_msg = enc_dec.decode(msg)
         if decoded_msg.type == message.ACK:
-            return decoded_msg.start
+            return decoded_msg.start[0:str_length]
+
+        #TODO: complete nack
 
 
 if __name__ == "__main__":
