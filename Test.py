@@ -3,12 +3,12 @@ import server
 import message as msg
 import encoder_decoder as encd
 
-TEAM_NAME = "kapara"
-DISCOVER = 1
-OFFER = 2
-REQUEST = 3
-ACK = 4
-NACK = 5
+TEAM_NAME = 'kapara'
+DISCOVER = '1'
+OFFER = '2'
+REQUEST = '3'
+ACK = '4'
+NACK = '5'
 
 
 class Tester(unittest.TestCase):
