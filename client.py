@@ -1,5 +1,4 @@
 import socket, message, ranger, math
-import itertools as it
 
 ##### client configuration #####
 
@@ -21,21 +20,6 @@ def main():
 
 
 #def send_discover(socket):
-
-def split_to_chunks(lst, each):
-    return list(it.zip_longest(*[iter(lst)] * each))
-
-
-def divide(length,num_servers):
-    start = 'a' * length
-    end   = 'z' * length
-    search_space = ranger.Ranger(start,end)
-    num_strings = NUM_OF_LETTERS ** length
-    strings = search_space.generate_all_from_to_of_len()
-    each = math.ceil(num_strings / num_servers)
-    chunks = split_to_chunks(strings,each)
-    return chunks
-
 
 
 
