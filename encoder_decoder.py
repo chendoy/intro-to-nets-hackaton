@@ -1,6 +1,7 @@
 import message as message
 
-class encoder_decoder():
+class Encoder_decoder():
+    pass
 
     def decode(self, encoded_msg):
         return encoded_msg.decode("utf-8")
