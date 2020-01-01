@@ -12,7 +12,7 @@ REQUEST = '3'
 ACK = '4'
 NEG_ACK = '5'
 encoder_decoder: encd.Encoder_decoder = encd.Encoder_decoder()
-server_port = 3107
+server_port = 3200
 
 
 class Server:
@@ -46,7 +46,7 @@ class Server:
     def listen_clients(self):
         while True:
             msg, client = self.server_socket.recvfrom(server_port)
-            print(encoder_decoder.decode(msg).type)
+            print("client connected, msg-" + encoder_decoder.decode(msg).type)
             t = threading.Thread(target=self.talkToClient, args=(client, encoder_decoder.decode(msg)))
             t.start()
 

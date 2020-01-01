@@ -1,15 +1,12 @@
-import socket, ranger, math, encoder_decoder
-import itertools as it
-import message as message
+import socket, ranger, math, encoder_decoder, message, itertools as it
 
 # client configuration #
 
-SERVER_NAME = 'hostname'
-SERVER_PORT = 3117
+SERVER_NAME = "127.0.0.1"
+SERVER_PORT = 3200
 TEAM_NAME = 'TCP MONSTERS'
 OFFER_TIMEOUT = 1000  # milliseconds
 NUM_OF_LETTERS = 26
-IP_ADDRESS = '127.0.0.1'
 WORKERS = []
 
 
@@ -18,8 +15,9 @@ def main():
     enc_dec = encoder_decoder.Encoder_decoder()
     hashed_string = input('Welcome to ' + TEAM_NAME + '.' + ' Please enter the hash:\n')
     str_length = input('Please enter the input string length:\n')
+    str_length = int(str_length)
     send_discover(client_sock, enc_dec)
-    workers = wait_for_offers(client_sock, enc_dec, OFFER_TIMEOUT)
+    workers = wait_for_offers(client_sock)
     jobs = create_jobs(str_length, len(workers))
     send_requests(workers, jobs, enc_dec, client_sock, hashed_string)
     ans = wait_for_ack()
@@ -27,7 +25,7 @@ def main():
 
 
 def send_requests(workers, jobs, enc_dec, client_sock, hashed_string):
-    i=0
+    i = 0
     for worker in workers:
         send_request(worker, jobs[i], enc_dec, client_sock, hashed_string)
         i = i + 1
@@ -46,7 +44,7 @@ def send_discover(client_socket: socket, enc_dec: encoder_decoder):
     client_socket.sendto(encoded, (SERVER_NAME, SERVER_PORT))
 
 
-def wait_for_offers(client_sock, enc_dec):
+def wait_for_offers(client_sock):
     client_sock.settimeout(OFFER_TIMEOUT)
     try:
         (message, server_address) = client_sock.recvfrom(2048)
@@ -61,7 +59,7 @@ def split_to_chunks(lst, each):
 
 def divide(length,num_servers):
     start = 'a' * length
-    end   = 'z' * length
+    end = 'z' * length
     search_space = ranger.Ranger(start,end)
     num_strings = NUM_OF_LETTERS ** length
     strings = search_space.generate_all_from_to_of_len()
@@ -79,7 +77,8 @@ def create_jobs(length, num_servers):
 
 
 def wait_for_ack():
-    return 'answer'
+
+
 
 if __name__ == "__main__":
     main()
