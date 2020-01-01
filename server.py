@@ -32,13 +32,13 @@ class Server:
 
     def process_message(self, user_message: message.Message):
         if user_message.type == DISCOVER:
-            encoder_decoder.encode(message.Message(user_message.team_name, OFFER, None, None, None, None))
+                return encoder_decoder.encode(message.Message(user_message.team_name, OFFER, None, None, None, None))
         elif user_message.type == REQUEST:
             res = self.search(user_message.start, user_message.end, user_message.hash)
             if res is None:
                 return encoder_decoder.encode(message.Message(TEAM_NAME, NEG_ACK, None, None, None, None))
             else:
-                return encoder_decoder.encode(message.Message(TEAM_NAME, ACK, res, 0, None, None))
+                return encoder_decoder.encode(message.Message(TEAM_NAME, ACK, res, None, None, None))
 
     def talkToClient(self, user_message, ip):
         self.server_socket.sendto(self.process_message(user_message), ip)

@@ -29,4 +29,14 @@ class Tester(unittest.TestCase):
         res_message: msg.Message = self.encoder_decoder.decode(res)
         self.assertEqual(res_message.type, OFFER)
 
+        #request, with ack
+        request_msg: msg.Message = msg.Message(TEAM_NAME, REQUEST, "12abf551138756adc2a88edc23cb77b1832b7ab8", '3', 'aaa', 'ccc')
+        res = self.server_side.process_message(request_msg)
+        res_message: msg.Message = self.encoder_decoder.decode(res)
+        self.assertEqual(res_message.type, ACK)
 
+        #request with nack
+        request_msg: msg.Message = msg.Message(TEAM_NAME, REQUEST, "12abf551138756adc2a88edc23cb77b1832b7ab8", '3', 'aad', 'ccc')
+        res = self.server_side.process_message(request_msg)
+        res_message: msg.Message = self.encoder_decoder.decode(res)
+        self.assertEqual(res_message.type, NACK)
