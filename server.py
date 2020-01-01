@@ -5,7 +5,7 @@ import encoder_decoder as encd
 import hashlib
 import threading
 
-TEAM_NAME = 'NAME'
+TEAM_NAME = 'UDP MONSTERS'
 DISCOVER = '1'
 OFFER = '2'
 REQUEST = '3'
@@ -44,10 +44,11 @@ class Server:
         self.server_socket.sendto(self.process_message(user_message), ip)
 
     def listen_clients(self):
+        print('server is running')
         while True:
             msg, client = self.server_socket.recvfrom(server_port)
             print("client connected, msg-" + encoder_decoder.decode(msg).type)
-            t = threading.Thread(target=self.talkToClient, args=(client, encoder_decoder.decode(msg)))
+            t = threading.Thread(target=self.talkToClient, args=(encoder_decoder.decode(msg), client))
             t.start()
 
 
