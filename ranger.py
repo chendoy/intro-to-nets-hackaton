@@ -27,6 +27,6 @@ class Ranger(object):
 
 
 if __name__ == '__main__':
-    test = Ranger('aaa', 'zzz')
+    test = Ranger('aa', 'zz')
     for string in test.generate_all_from_to_of_len():
         print(string)

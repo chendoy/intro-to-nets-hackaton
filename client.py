@@ -11,7 +11,7 @@ SERVER_IP = "127.0.0.1"
 BROADCAST = "255.255.255.255"
 SERVER_PORT = 3117
 TEAM_NAME = 'UDP FTW'
-OFFER_TIMEOUT = 1000  # milliseconds
+OFFER_TIMEOUT = 1  # milliseconds
 NUM_OF_LETTERS = 26
 WORKERS = []
 
@@ -54,8 +54,9 @@ def send_discover():
 def wait_for_offers():
     client_sock.settimeout(OFFER_TIMEOUT)
     try:
-        (message, server_address) = client_sock.recvfrom(2048)
-        WORKERS.append(server_address)
+        while 1:
+            (message, server_address) = client_sock.recvfrom(2048)
+            WORKERS.append(server_address)
     except socket.timeout:
         return
 
