@@ -17,7 +17,7 @@ END_OFFSET = 330
 
 def str_or_blank(_in):
     if _in is None:
-        return ""
+        return " "
     else:
         return str(_in)
 
@@ -39,9 +39,10 @@ class Encoder_decoder():
         type = raw_str[TYPE_OFFSET:TYPE_OFFSET+TYPE_LEN]
         hash = raw_str[HASH_OFFSET:HASH_OFFSET+HASH_LEN]
         length = raw_str[ORIG_LEN_OFFSET:ORIG_LEN_OFFSET+ORIG_LEN_LEN]
-        start = raw_str[START_OFFSET:START_OFFSET+START_LEN]
-        end = raw_str[END_OFFSET:END_OFFSET+END_LEN]
+        start = raw_str[START_OFFSET:START_OFFSET+int(length)]
+        end = raw_str[START_OFFSET+int(length):START_OFFSET+2*int(length)]
         return message.Message(team_name, type, hash, length, start, end)
+
 
     def encode(self, message):
         orig_msg = ''
@@ -53,10 +54,8 @@ class Encoder_decoder():
         orig_msg += str_or_blank(message.hash) + ('0' * padding)
         padding = ORIG_LEN_LEN - len_or_blank(message.length)
         orig_msg += str_or_blank(message.length) + ('0' * padding)
-        padding = START_LEN - len_or_blank(message.start)
-        orig_msg += str_or_blank(message.start) + ('0' * padding)
-        padding = END_LEN - len_or_blank(message.end)
-        orig_msg += str_or_blank(message.end) + ('0' * padding)
+        orig_msg += str_or_blank(message.start)
+        orig_msg += str_or_blank(message.end)
         return bytes(orig_msg, 'utf-8')
 
 

@@ -12,6 +12,7 @@ BROADCAST = "255.255.255.255"
 SERVER_PORT = 3117
 TEAM_NAME = 'UDP FTW'
 OFFER_TIMEOUT = 1  # milliseconds
+ACK_TIMEOUT = 30
 NUM_OF_LETTERS = 26
 WORKERS = []
 
@@ -26,7 +27,7 @@ def main():
     wait_for_offers()
     jobs = create_jobs(str_length, len(WORKERS))
     send_requests(WORKERS, jobs, hashed_string)
-    ans = wait_for_ack(str_length)
+    ans = wait_for_ack()
     print('The input string is ' + ans)
 
 
@@ -84,13 +85,13 @@ def create_jobs(length, num_servers):
     return jobs
 
 
-def wait_for_ack(str_length):
-    client_sock.settimeout(30)
+def wait_for_ack():
+    client_sock.settimeout(ACK_TIMEOUT)
     while 1:
         (msg, server_address) = client_sock.recvfrom(2048)
         decoded_msg = enc_dec.decode(msg)
         if decoded_msg.type == message.ACK:
-            return decoded_msg.start[0:str_length]
+            return decoded_msg.start
         elif decoded_msg.type == message.NACK:
             WORKERS.remove(server_address)
 

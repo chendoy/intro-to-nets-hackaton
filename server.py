@@ -32,25 +32,42 @@ class Server:
 
     def process_message(self, user_message: message.Message, len):
         if user_message.type == DISCOVER:
+                self.echo_msg_info(OFFER)
                 return encoder_decoder.encode(message.Message(user_message.team_name, OFFER, None, None, None, None))
         elif user_message.type == REQUEST:
             res = self.search(user_message.start[0:len], user_message.end[0:len], user_message.hash)
             if res is None:
-                return encoder_decoder.encode(message.Message(TEAM_NAME, NEG_ACK, None, None, None, None))
+                self.echo_msg_info(NEG_ACK)
+                return encoder_decoder.encode(message.Message(TEAM_NAME, NEG_ACK, None, str(len), None, None))
             else:
                 hash_msg = user_message.hash
-                return encoder_decoder.encode(message.Message(TEAM_NAME, ACK,user_message.hash, None, res, None))
+                self.echo_msg_info(ACK)
+                return encoder_decoder.encode(message.Message(TEAM_NAME, ACK,hash_msg, str(len), res, None))
 
     def talkToClient(self, user_message:message.Message, ip):
         server_response = self.process_message(user_message, int(user_message.length))
         self.server_socket.sendto(server_response, ip)
 
+
+    def echo_msg_info(self, type):
+        if type is '1':
+            print('received: discover')
+        elif type is '2':
+            print('sent: offer')
+        elif type is '3':
+            print('received: request')
+        elif type is '4':
+            print('sent: ack')
+        elif type is '5':
+            print('sent: nack')
+        return
+
     def listen_clients(self):
-        print('server is running')
+        print('server is running...')
         while True:
             msg, client = self.server_socket.recvfrom(server_port)
-            print("sent msg-" + encoder_decoder.decode(msg).type)
             decoded_msg =encoder_decoder.decode(msg)
+            self.echo_msg_info(decoded_msg.type)
             t = threading.Thread(target=self.talkToClient, args=(decoded_msg, client))
             t.start()
 
