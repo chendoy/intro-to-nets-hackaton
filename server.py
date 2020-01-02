@@ -49,7 +49,7 @@ class Server:
         print('server is running')
         while True:
             msg, client = self.server_socket.recvfrom(server_port)
-            print("client connected, msg-" + encoder_decoder.decode(msg).type)
+            print("sent msg-" + encoder_decoder.decode(msg).type)
             decoded_msg =encoder_decoder.decode(msg)
             t = threading.Thread(target=self.talkToClient, args=(decoded_msg, client))
             t.start()

@@ -84,6 +84,7 @@ def create_jobs(length, num_servers):
 
 
 def wait_for_ack(str_length):
+    client_sock.settimeout(30)
     while 1:
         (msg, server_address) = client_sock.recvfrom(2048)
         decoded_msg = enc_dec.decode(msg)
