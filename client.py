@@ -1,5 +1,5 @@
 import socket
-import ranger
+import string_utils
 import math
 import encoder_decoder
 import message
@@ -69,7 +69,7 @@ def split_to_chunks(lst, each):
 def divide(length, num_servers):
     start = 'a' * length
     end = 'z' * length
-    search_space = ranger.Ranger(start,end)
+    search_space = string_utils.Ranger(start, end)
     num_strings = NUM_OF_LETTERS ** length
     strings = search_space.generate_all_from_to_of_len()
     each = math.ceil(num_strings / num_servers)
@@ -79,7 +79,7 @@ def divide(length, num_servers):
 
 def create_jobs(length, num_servers):
     jobs = []
-    chunks = divide(length, num_servers)
+    chunks = string_utils.split_fairly(length,num_servers)
     for chunk in chunks:
         jobs.append((chunk[0], chunk[-1]))
     return jobs

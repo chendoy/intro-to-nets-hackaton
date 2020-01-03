@@ -1,6 +1,6 @@
 import socket
 import message
-import ranger
+import string_utils
 import encoder_decoder as encd
 import hashlib
 import threading
@@ -23,7 +23,7 @@ class Server:
         self.server_socket.bind(("", server_port))
 
     def search(self, start, end, hash_str):
-        r: ranger.Ranger = ranger.Ranger(start, end)
+        r: string_utils.Ranger = string_utils.Ranger(start, end)
         for word in r.generate_all_from_to_of_len():
             hash_fun_res = hashlib.sha1(word.encode('utf-8')).hexdigest()
             if hash_fun_res == hash_str:
