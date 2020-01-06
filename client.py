@@ -39,14 +39,14 @@ def send_requests(workers, jobs, hashed_string):
 
 
 def send_request(worker, job, hashed_string):
-    length = str(len(job[0]))
+    length = len(job[0])
     req_msg = message.Message(TEAM_NAME, message.REQUEST, hashed_string, length, job[0], job[1])
     encoded_msg = enc_dec.encode(req_msg)
     client_sock.sendto(encoded_msg, (worker[0], SERVER_PORT))
 
 
 def send_discover():
-    discover_msg = message.Message(TEAM_NAME, message.DISCOVER, None, None, None, None)
+    discover_msg = message.Message(TEAM_NAME, message.DISCOVER, "", 1, "", "")
     encoded = enc_dec.encode(discover_msg)
     client_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
     client_sock.sendto(encoded, (BROADCAST, SERVER_PORT))

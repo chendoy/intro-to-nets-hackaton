@@ -6,11 +6,11 @@ import hashlib
 import threading
 
 TEAM_NAME = 'UDP FTW'
-DISCOVER = '1'
-OFFER = '2'
-REQUEST = '3'
-ACK = '4'
-NEG_ACK = '5'
+DISCOVER = 1
+OFFER = 2
+REQUEST = 3
+ACK = 4
+NEG_ACK = 5
 encoder_decoder: encd.Encoder_decoder = encd.Encoder_decoder()
 server_port = 3117
 
@@ -28,37 +28,37 @@ class Server:
             hash_fun_res = hashlib.sha1(word.encode('utf-8')).hexdigest()
             if hash_fun_res == hash_str:
                 return word
-        return None
+        return ""
 
     def process_message(self, user_message: message.Message, len):
         if user_message.type == DISCOVER:
                 self.echo_msg_info(OFFER)
-                return encoder_decoder.encode(message.Message(user_message.team_name, OFFER, None, None, None, None))
+                return encoder_decoder.encode(message.Message(user_message.team_name, OFFER, "", 1, "", ""))
         elif user_message.type == REQUEST:
             res = self.search(user_message.start[0:len], user_message.end[0:len], user_message.hash)
-            if res is None:
+            if res is "":
                 self.echo_msg_info(NEG_ACK)
-                return encoder_decoder.encode(message.Message(TEAM_NAME, NEG_ACK, None, str(len), None, None))
+                return encoder_decoder.encode(message.Message(TEAM_NAME, NEG_ACK, "", len, "", ""))
             else:
                 hash_msg = user_message.hash
                 self.echo_msg_info(ACK)
-                return encoder_decoder.encode(message.Message(TEAM_NAME, ACK,hash_msg, str(len), res, None))
+                return encoder_decoder.encode(message.Message(TEAM_NAME, ACK,hash_msg, len, res, ""))
 
     def talkToClient(self, user_message:message.Message, ip):
-        server_response = self.process_message(user_message, int(user_message.length))
+        server_response = self.process_message(user_message, user_message.length)
         self.server_socket.sendto(server_response, ip)
 
 
     def echo_msg_info(self, type):
-        if type is '1':
+        if type == 1:
             print('received: discover')
-        elif type is '2':
+        elif type == 2:
             print('sent: offer')
-        elif type is '3':
+        elif type == 3:
             print('received: request')
-        elif type is '4':
+        elif type == 4:
             print('sent: ack')
-        elif type is '5':
+        elif type == 5:
             print('sent: nack')
         return
 

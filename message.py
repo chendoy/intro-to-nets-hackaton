@@ -1,8 +1,8 @@
-DISCOVER = '1'
-OFFER = '2'
-REQUEST = '3'
-ACK = '4'
-NACK = '5'
+DISCOVER = 1
+OFFER = 2
+REQUEST = 3
+ACK = 4
+NACK = 5
 
 class Message:
 
