@@ -14,7 +14,7 @@ ACK = 4
 NEG_ACK = 5
 encoder_decoder: encd.Encoder_decoder = encd.Encoder_decoder()
 server_port = 3117
-WORK_TIME = 2
+WORK_TIME = 10.0
 
 class Server:
     server_socket = None
@@ -27,7 +27,7 @@ class Server:
         r: string_utils.Ranger = string_utils.Ranger(start, end)
         for word in r.generate_all_from_to_of_len():
             if time.time() - start_time > WORK_TIME:
-                print("searching time elapsed, stopping to search")
+                print("Searching time elapsed, stopping to search")
                 return ""
             else:
                 hash_fun_res = hashlib.sha1(word.encode('utf-8')).hexdigest()
