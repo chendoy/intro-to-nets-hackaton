@@ -2,6 +2,7 @@ import unittest
 import server
 import message as msg
 import encoder_decoder as encd
+import time
 
 TEAM_NAME = 'UDP FTW'
 DISCOVER = b'1'
@@ -16,11 +17,10 @@ class Tester(unittest.TestCase):
     encoder_decoder: encd.Encoder_decoder = encd.Encoder_decoder()
 
     def test_searching(self):
-        res = self.server_side.search("aaa", "zzz", "99875401d16283b911c70b1ddbc25ac40836367f")
+        res = self.server_side.search("aaa", "zzz", "99875401d16283b911c70b1ddbc25ac40836367f", time.time())
         self.assertEqual(res, "tst")
-
-        res = self.server_side.search("aaazzcs", "zzzzzza", "01cf32fce06fa4139787a54c3b6af902ae113ade")
-        self.assertEqual(res, "aacjhnb")
+        res = self.server_side.search("aaazzcs", "zzzzzza", "1f8ac10f23c5b5bc1167bda84b833e5c057a77d2", time.time())
+        self.assertEqual(res, "abcdef")
 
     def test_processMessage(self):
         # discover message Message
