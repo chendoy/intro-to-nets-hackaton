@@ -14,7 +14,7 @@ ACK = 4
 NEG_ACK = 5
 encoder_decoder: encd.Encoder_decoder = encd.Encoder_decoder()
 server_port = 3117
-WORK_TIME = 10.0
+WORK_TIME = 20.0
 
 class Server:
     server_socket = None

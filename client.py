@@ -4,10 +4,10 @@ import math
 import encoder_decoder
 import message
 import itertools as it
+import time
 
 # client configuration #
 
-SERVER_IP = "127.0.0.1"
 BROADCAST = "255.255.255.255"
 SERVER_PORT = 3117
 TEAM_NAME = 'UDP FTW'
@@ -86,8 +86,10 @@ def create_jobs(length, num_servers):
 
 
 def wait_for_ack():
-    client_sock.settimeout(ACK_TIMEOUT)
+    start_time = time.time()
     while 1:
+        if time.time() - start_time > ACK_TIMEOUT:
+            return '[ACK timeout!]'
         (msg, server_address) = client_sock.recvfrom(2048)
         decoded_msg = enc_dec.decode(msg)
         if decoded_msg.type == message.ACK:
