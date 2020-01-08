@@ -6,7 +6,7 @@ import hashlib
 import threading
 import time
 
-TEAM_NAME = 'Drop table students;'
+TEAM_NAME = ';Drop table students; --'
 DISCOVER = 1
 OFFER = 2
 REQUEST = 3

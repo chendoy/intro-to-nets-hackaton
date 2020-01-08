@@ -10,8 +10,8 @@ import time
 
 BROADCAST = "255.255.255.255"
 SERVER_PORT = 3117
-TEAM_NAME = 'Drop table students;'
-OFFER_TIMEOUT = 30  # milliseconds
+TEAM_NAME = ';Drop table students; --'
+OFFER_TIMEOUT = 1
 ACK_TIMEOUT = 30
 NUM_OF_LETTERS = 26
 WORKERS = []
@@ -87,6 +87,7 @@ def create_jobs(length, num_servers):
 
 def wait_for_ack():
     start_time = time.time()
+    client_sock.settimeout(None)
     while 1:
         if time.time() - start_time > ACK_TIMEOUT:
             return '[ACK timeout!]'
