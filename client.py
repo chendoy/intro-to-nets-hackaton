@@ -10,8 +10,8 @@ import time
 
 BROADCAST = "255.255.255.255"
 SERVER_PORT = 3117
-TEAM_NAME = 'UDP FTW'
-OFFER_TIMEOUT = 1  # milliseconds
+TEAM_NAME = 'Drop table students;'
+OFFER_TIMEOUT = 30  # milliseconds
 ACK_TIMEOUT = 30
 NUM_OF_LETTERS = 26
 WORKERS = []
