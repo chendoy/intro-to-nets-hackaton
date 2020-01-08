@@ -19,8 +19,12 @@ WORKERS = []
 client_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 enc_dec = encoder_decoder.Encoder_decoder()
 
+
+
 def main():
     hashed_string = input('Welcome to ' + TEAM_NAME + '.' + ' Please enter the hash:\n')
+    if not_valid(hashed_string):
+        return
     str_length = input('Please enter the input string length:\n')
     str_length = int(str_length)
     send_discover()
@@ -83,6 +87,19 @@ def create_jobs(length, num_servers):
     for chunk in chunks:
         jobs.append((chunk[0], chunk[-1]))
     return jobs
+
+
+def not_valid(hashed_string):
+    length = len(hashed_string)
+    if length != 40:
+        print('Input string must be of length 40.')
+        return True
+    try:
+        sha_int = int(hashed_string, 16)
+    except ValueError:
+        print('Input string must be sh1 hash.')
+        return True
+    return False
 
 
 def wait_for_ack():
